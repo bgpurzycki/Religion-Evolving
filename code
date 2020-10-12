@@ -1,0 +1,155 @@
+###########################################
+#### Code for: Religion Evolving: The Dynamics
+#### of Culture, Cognition, and Ecology
+#### Prepared by Benjamin Grant Purzycki
+#### Last updated: September 29, 2020
+###########################################
+
+rm(list = ls()) # clear session
+
+setwd("")
+
+library(ggplot2)
+library(ggrepel)
+library(maps)
+library(mapproj)
+library(lsr)
+
+#### Map of Sites
+d <- read.table("GPS.txt", sep = "\t", header = TRUE)
+
+Latitude <- d$Lat
+Longitude <- d$Long
+Label <- d$Population
+Voffset <- d$voffset
+Hoffset <- d$hoffset
+
+par(mar = c(0, 0, 0, 0))
+mp <- NULL
+mapWorld <- borders("world", colour = "lightgrey", fill = "lightgrey") 
+mp <- ggplot() + mapWorld + theme(axis.text = element_text(size = 10),
+                                  panel.background = element_blank(),
+                                  axis.title = element_text(size = 10)) +
+  labs(x="Longitude",y="Latitude")  + 
+  coord_map(projection = "mercator",
+            xlim = c(-180,180), ylim = c(-65, 75))
+
+mp <- mp + geom_point(aes(x = Longitude, y = Latitude) ,
+                      color = "black", size = 2)
+mp <- mp +  geom_text_repel(aes(x = Longitude, y = Latitude, label = Label), 
+                            force = 6, nudge_x = -1.5, color = "black",size = 4)
+mp
+
+#ggsave( "map.pdf", mp, width = 10, height = 6.5)
+
+###########################################
+#### Properties of the Gods (Chapter 2: "Resistance, subversion...)
+
+dat <- read.csv("CERC Dataset (Wave 1) Version 6.0.csv")
+
+### Hadza barplot (Fig. 1)
+Haine <- c(.76, .17, .06)
+Ishoko <- c(.60, .34, .06)
+reply <- c("Yes", "No", "D/K")
+hadzatab <- data.frame(Haine, Ishoko, reply)
+rownames(hadzatab) <- hadzatab$reply
+hadzatab$reply <- NULL
+hadzatab <- as.matrix(hadzatab)
+
+par(mfrow=c(1,1), mai = c(.5, .8, .2, .2)) #bottom, left, top, right
+
+barplot(hadzatab, main=NA, cex.lab = 1,
+        ylab="Proportion of Sample", xlab = NA, col=c("darkgray","white", "lightgray"), 
+        beside=T, ylim = c(0,1), space=c(.2, .2, .2, 1, .2, .2), cex.names = 1, cex.axis = 1,
+        names.arg = c("Believe in Haine?", "Believe in Ishoko?"))
+abline(h =.8, col = "lightgray", lty = 1, lwd = 1)
+abline(h =.6, col = "lightgray", lty = 1, lwd = 1)
+abline(h =.4, col = "lightgray", lty = 1, lwd = 1)
+abline(h =.2, col = "lightgray", lty = 1, lwd = 1)
+barplot(hadzatab, main=NA, cex.lab = 1,
+        ylab="Proportion of Sample", xlab = NA, col=c("darkgray","white", "lightgray"), 
+        beside=T, ylim = c(0,1), space=c(.2, .2, .2, 1, .2, .2), 
+        cex.names = 1, cex.axis = 1,
+        names.arg = c("Believe in Haine?", "Believe in Ishoko?"), add = T)
+legend("top", inset = .06, rownames(hadzatab), 
+       fill = c("darkgray","white", "lightgray"), horiz = T)
+box()
+
+### Hadza density plots (Fig. 2)
+hadza <- dat[which(dat$SITE=="Hadza"), ]
+
+mycol1 <- rgb(5,5,5, max = 255, alpha = 100, names = "darkgray") 
+mycol2 <-  rgb(255, 255, 255, max = 255, alpha = 100, names = "white")
+mycol3 <- rgb(0, 0, 0, max = 255, alpha = 100, names = "black")
+
+par(mfrow=c(1,3), mai = c(.6, .3, .3, .1)) #bottom, left, top, right
+
+densOM <- density(hadza$OMNI.BG, na.rm = T)
+densOL <- density(hadza$OMNI.LG, na.rm = T)
+
+plot(NA, xlab = "Knowledge", ylab = "", xlim=c(-1,2), ylim=c(0,1.1), cex.lab = 1.3)
+polygon(densOM, col = mycol1)
+polygon(densOL, col = mycol2)
+abline(v = 0, lty = 2)
+
+densPM <- density(hadza$DIEPUN, na.rm = T)
+densPL <- density(hadza$LGDIEPUN, na.rm = T)
+
+plot(NA, xlab = "Punishment", ylab = "", xlim=c(-1,2), ylim=c(0,1.1), cex.lab = 1.3)
+polygon(densPM, col = mycol1)
+polygon(densPL, col = mycol2)
+abline(v = 0, lty = 2)
+
+hadza$MORAL.MG <- (hadza$BGSTEALH + hadza$BGLYINGH + hadza$BGMURDERH)/3
+hadza$MORAL.LG <- (hadza$LGSTEALH + hadza$LGLYINGH + hadza$LGMURDERH)/3
+
+densMM <- density(hadza$MORAL.MG, na.rm = T)
+densML <- density(hadza$MORAL.LG, na.rm = T)
+
+plot(NA, xlab = "Moral Interest", ylab = "", xlim=c(-2,2), ylim=c(0,1.1), cex.lab = 1.3)
+polygon(densMM, col = mycol1)
+polygon(densML, col = mycol2)
+abline(v = -1, lty = 2)
+
+## Tyva (Fig. 3)
+tyva <- dat[which(dat$SITE=="Tyva Republic"), ]
+tyva$BGMURDER <- as.numeric(tyva$BGMURDER)
+tyva$BGMURDER <- tyva$BGMURDER - 1
+
+par(mfrow=c(1,2), mai = c(1, .5, .5, .1)) #bottom, left, top, right
+
+densOM <- density(tyva$OMNI.BG, na.rm = T)
+densPM <- density(tyva$DIEPUN, na.rm = T)
+
+plot(NA, xlab = "Knowledge and Punishment", ylab = "", xlim=c(-.5,1.5), ylim=c(0,3), cex.lab = 1.3)
+polygon(densOM, col = mycol1) # grey
+polygon(densPM, col = mycol2) # white
+abline(v = 0, lty = 2)
+
+tyva$MORAL.MG <- (tyva$BGSTEAL + tyva$BGLYING + tyva$BGMURDER)/3
+
+densMM <- density(tyva$MORAL.MG, na.rm = T)
+
+plot(NA, xlab = "Moral Interest", ylab = "", xlim=c(-2,6), ylim=c(0,.4), cex.lab = 1.3)
+polygon(densMM, col = mycol1)
+abline(v = 0, lty = 2)
+
+###########################################
+#### Response Time Script (Chapter 4: "Gods, governments...")
+
+g <- read.csv("godFOCALV.csv", na = "NA")
+n <- read.csv("newlandFOCALV.csv", na = "NA")
+s <- read.csv("santaFOCALV.csv", na = "NA")
+a <- read.csv("arkFOCALV.csv", na = "NA")
+
+aggregate(LOGRTIME~TYPE, g, mean) # stats for rtime for God
+aggregate(LOGRTIME~TYPE, g, ciMean)
+
+aggregate(LRTIME~TYPE, n, mean) # stats for Newland
+aggregate(LRTIME~TYPE, n, ciMean)
+
+aggregate(logdiff~type, s, mean) # stats for Santa
+aggregate(logdiff~type, s, ciMean)
+
+aggregate(LRTIME~TYPE, a, mean) # stats for The Ark
+aggregate(LRTIME~TYPE, a, ciMean)
