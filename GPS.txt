@@ -1,0 +1,32 @@
+Population	Lat	Long	hoffset	voffset					
+Canary Islands	28.2916	-16.6291	0	0					
+Carribean Islands	21.4691	-78.6569	0	0					
+Hadza	-8.544406	32.382611	0	0					
+Pirahã 	7.5169	-63.0298	0	0					
+San (!Kung)	-22.9576	18.4904	0	0					
+Burma	21.9162	95.956	0	0					
+Tyvans	51.467866	94.889078	0	0					
+Azande	4.258768	28.606861	0	0					
+Papua New Guinea	-6.314993	143.955551	0	0					
+Lakota (Sioux)	44.565151	-100.356389	0	0					
+Fang	1.6508	10.2679	0	0					
+Greece	39.0742	21.8243	0	0					
+Ainu	37.124119	139.595936	0	0					
+Altaians	50.6182	86.2199	0	0					
+W. Australian Aboriginal 	-25.221891	122.437885	0	0					
+Mbuti	4.0383	21.7587	0	0					
+Yanomamö	3.869735	-63.004504	0	0					
+Netsilik	65.287082	-95.864753	0	0					
+Hopi	35.7833	-110.5035	0	0					
+Ifaluk	7.2514	144.4455	0	0					
+India	20.5937	78.9629	0	0					
+Balinese	8.3405	115.092	0	0					
+Israel	31.0461	34.8516	0	0					
+Matsigenka 	-8.826703	-75.231267	0	0					
+Shuar	-0.927068	-78.287266	0	0					
+Khanty	61.0061	69.0312	0	0					
+Highland Chiapas	16.7319	-92.6494	0	0					
+Spain	40.4637	3.7492	0	0					
+Mongolians	46.8625	103.8467	0	0					
+Nuer	6.877	31.307	0	0					
+Taiwan	23.6978	120.9605	0	0					
